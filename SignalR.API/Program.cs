@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using SignalR.API.Hubs;
+using SignalR.API.Modals;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +14,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
     {
-        builder.WithOrigins("https://localhost:7109").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        builder.WithOrigins("https://localhost:44328").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
     });
 });
 builder.Services.AddSignalR();
-
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConStr"));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
