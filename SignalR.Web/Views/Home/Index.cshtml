@@ -87,19 +87,32 @@
                 console.log(teams)
 
                 teams.forEach((team, index) => {
+
                     let listName;
+
                     if (team.teamId == 1) {
+
                         listName = "ATeamList";
                     }
                     else
                         listName = "BTeamList";
+
                     team.users.forEach((user, index) => {
                         $(`#${listName}`).append(`<li class="list-group-item">${user.name}</li>`)
                     })
                 })
             })
-
+            connection.on("ReceiveProduct", product) => {
+                console.log(product);
+            })
             //clicks
+            
+            $("#btnProduct").click(() => {
+
+                let product = { "Id": 1, "Name": "Kalem", "Price": 100, "Stock": 200 };
+                connection.invoke("SeendProduct", product);
+            })
+
             $("#btnNameSave").click(() => {
 
                 connection.invoke("SendName", $("#txtName").val()).catch((err) => console.log(err))
@@ -108,6 +121,11 @@
                 let name = $("#txtName").val();
 
                 let teamName = $("input[type=radio]:checked").val();
+
+                if (teamName == null) {
+                    alert("Takım seçiniz")
+                    return;
+                }
 
                 connection.invoke("SendNameByGroup", name, teamName).catch((e) => {
                     console.log(e);
@@ -137,6 +155,7 @@
             <hr />
             <button class="btn btn-primary" id="btnNameSave">İsim Kaydet</button>
             <button class="btn btn-warning" id="btnNameTeam">İsim Kaydet(Takım)</button>
+            <button class="butn btn-danger" id="btnProduct">Ürün Kaydet</button>
             <div class="alert alert-info mt-2">
                 <div class="float-lg-start">
                     Baglanti Durumu: <strong id="conStatus"></strong>
@@ -176,9 +195,11 @@
         <div class="col-md-8 offset-2">
             <div class="row">
                 <div class="col-md-6">
+                    <h2>A Takımı</h2>
                     <ul class="list-group" id="ATeamList"></ul>
                 </div>
                 <div class="col-md-6">
+                    <h2>B Takımı</h2>
                     <ul class="list-group" id="BTeamList"></ul>
                 </div>
 

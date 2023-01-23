@@ -1,6 +1,7 @@
 import React from 'react'
 import MessageContainer from './MessageContainer'
-import SendMessage from './SendMessage'
+import SendMessageView from './SendMessageView'
+
 
 export default function Chat({messages,sendMessage}) {
 
@@ -8,7 +9,7 @@ export default function Chat({messages,sendMessage}) {
   return (
     <div className='chat'>
         <MessageContainer messages = {messages}/>
-        <SendMessage sendMessage={sendMessage}/>
+        <SendMessageView sendMessage={sendMessage}/>
     </div>
   )
 }

@@ -15,7 +15,11 @@ namespace SignalR.API.Hubs
         private static List<string> Names { get; set; } = new List<string>();
         private static int ClientCount { get; set; } = 0;
         public static int TeamCount { get; set; } = 7;
-        public async void SendName(string name)
+        public async Task SendProduct(Product p)
+        {
+            Clients.All.SendAsync("ReceiveProduct", p);
+        }
+        public async Task SendName(string name)
         {
             if (Names.Count >= TeamCount)
             {
@@ -73,13 +77,13 @@ namespace SignalR.API.Hubs
         
 
 
-        public  override async Task OnConnectedAsync()
+        public async override  Task OnConnectedAsync()
         {
             ClientCount++;
             await Clients.All.SendAsync("ReceiveClientCount", ClientCount);
             await base.OnConnectedAsync();
         }
-        public override async Task OnDisconnectedAsync(Exception? exception)
+        public async override Task OnDisconnectedAsync(Exception? exception)
         {
             ClientCount--;
             await Clients.All.SendAsync("ReceiveClientCount", ClientCount);
